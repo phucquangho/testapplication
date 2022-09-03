@@ -56,11 +56,9 @@ import timber.log.Timber;
 
 public class MLService {
     private static final String TAG = MLService.class.getSimpleName();
-    Context context;
     CompositeDisposable compositeDisposables;
 
-    public MLService(Context context){
-        this.context = context;
+    public MLService(){
         initCustomModel();
         compositeDisposables = new CompositeDisposable();
     }
@@ -172,17 +170,17 @@ public class MLService {
 
 
     private void initCustomModel() {
-        mLabelList = loadLabelList(context);
+//        mLabelList = loadLabelList(context);
 
-        int[] inputDims = {DIM_BATCH_SIZE, DIM_IMG_SIZE_X, DIM_IMG_SIZE_Y, DIM_PIXEL_SIZE};
-        int[] outputDims = {DIM_BATCH_SIZE, mLabelList.size()};
+//        int[] inputDims = {DIM_BATCH_SIZE, DIM_IMG_SIZE_X, DIM_IMG_SIZE_Y, DIM_PIXEL_SIZE};
+//        int[] outputDims = {DIM_BATCH_SIZE, mLabelList.size()};
         DownloadConditions conditions = new DownloadConditions
                 .Builder()
                 .requireWifi()
                 .build();
         LocalModel localSource =
                 new LocalModel.Builder()
-                        .setAssetFilePath(LOCAL_MODEL_ASSET).build();
+                        .setAbsoluteFilePath("C:\\Users\\Admin\\AndroidStudioProjects\\testapplication\\app\\src\\main\\assets\\mobilenet_v2_1.0_224_quant.tflite").build();
 
         CustomRemoteModel cloudSource = new CustomRemoteModel.Builder
                 (new FirebaseModelSource.Builder(HOSTED_MODEL_NAME).build())// You could also specify
@@ -191,13 +189,13 @@ public class MLService {
                 .build();
 
         RemoteModelManager manager = RemoteModelManager.getInstance();
-        manager.download(cloudSource,conditions).
-                addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-
-                    }
-                });
+//        manager.download(cloudSource,conditions).
+//                addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void unused) {
+//                        Timber.tag(TAG).e("testing");
+//                    }
+//                });
 
         manager.getInstance().isModelDownloaded(cloudSource)
                 .addOnSuccessListener(new OnSuccessListener<Boolean>() {
